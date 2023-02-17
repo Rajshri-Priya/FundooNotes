@@ -1,0 +1,1 @@
+celery -A FundooNotes.celery worker --pool=solo -l info

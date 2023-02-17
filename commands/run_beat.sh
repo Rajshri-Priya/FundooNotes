@@ -1,0 +1,1 @@
+celery -A FundooNotes beat -l info

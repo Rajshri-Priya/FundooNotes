@@ -1,32 +1,27 @@
-import json
-from datetime import datetime
-
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-from django.shortcuts import render
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from rest_framework.response import Response
 from rest_framework.views import APIView
-#from django.views.decorators.csrf import csrf_exempt
-
-import user_auth
 from Notes.models import Notes, Labels
 from Notes.serializers import NotesSerializer, LabelsSerializer
-from user_auth.models import CustomUser
+from logging_confiq.logger import get_logger
+
+# logger config
+logger = get_logger()
 
 
 # Create your views here.
 class NotesAPIView(APIView):
     serializer_class = NotesSerializer
-    #@csrf_exempt
+
     def post(self, request):
         try:
             request.data.update({'user': request.user.id})
             serializer = NotesSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({"message": "Note Created Successfully", "data": serializer.data, "status": 201}, status=201)
+            return Response({"message": "Note Created Successfully", "data": serializer.data, "status": 201},
+                            status=201)
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
     def get(self, request):
@@ -35,6 +30,7 @@ class NotesAPIView(APIView):
             serializer = NotesSerializer(notes, many=True)
             return Response(serializer.data)
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
     def put(self, request, note_id):
@@ -47,6 +43,7 @@ class NotesAPIView(APIView):
             return Response({'message': 'Note updated successfully!', 'Data': serializer.data})
 
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
     def delete(self, request, note_id):
@@ -55,6 +52,7 @@ class NotesAPIView(APIView):
             notes.delete()
             return Response({"Message": "Note Deleted Successfully"}, status=204)
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
 
@@ -68,14 +66,17 @@ class LabelsAPIView(APIView):
             serializer.save()
             return Response({"message": "Label Added Successfully", "data": serializer.data, "status": 201}, status=201)
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
     def get(self, request):
         try:
             labels = Labels.objects.filter(user=request.user)
             serializer = LabelsSerializer(labels, many=True)
-            return Response({"message": "Label retrieve Successfully", "data": serializer.data, "status": 201}, status=201)
+            return Response({"message": "Label retrieve Successfully", "data": serializer.data, "status": 201},
+                            status=201)
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
     def put(self, request, labels):
@@ -83,9 +84,11 @@ class LabelsAPIView(APIView):
             serializer = LabelsSerializer(labels, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({'message': 'Labels updated successfully!', 'Data': serializer.data, 'status':201}, status=201)
+            return Response({'message': 'Labels updated successfully!', 'Data': serializer.data, 'status': 201},
+                            status=201)
 
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
     def delete(self, request, pk):
@@ -94,6 +97,7 @@ class LabelsAPIView(APIView):
             labels.delete()
             return Response({"Message": "Labels Deleted Successfully"}, status=204)
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
 
@@ -113,13 +117,17 @@ class ArchiveNoteList(APIView):
             notes.save()
             return Response({'message': 'isArchived updated successfully!'})
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
     def get(self, request):
-
-        notes = Notes.objects.filter(isArchive=True)
-        serializer = NotesSerializer(notes, many=True)
-        return Response(serializer.data)
+        try:
+            notes = Notes.objects.filter(isArchive=True)
+            serializer = NotesSerializer(notes, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            logger.exception(e)
+            return Response({'message': str(e)}, status=400)
 
 
 class TrashNotesAPIView(APIView):
@@ -136,13 +144,14 @@ class TrashNotesAPIView(APIView):
             notes.save()
             return Response({'success': True, 'message': 'Notes isTrash successful!'}, status=200)
         except Exception as e:
+            logger.exception(e)
             return Response({'message': str(e)}, status=400)
 
-
     def get(self, request):
-
-        notes = Notes.objects.filter(isTrash=True)
-        serializer = NotesSerializer(notes, many=True)
-        return Response(serializer.data)
-
-
+        try:
+            notes = Notes.objects.filter(isTrash=True)
+            serializer = NotesSerializer(notes, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            logger.exception(e)
+            return Response({'message': str(e)}, status=400)

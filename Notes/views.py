@@ -1,39 +1,46 @@
+import json
+from datetime import datetime
+
 from django.contrib.auth.models import User
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import render
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from rest_framework.response import Response
 from rest_framework.views import APIView
+#from django.views.decorators.csrf import csrf_exempt
 
-from Notes.models import Notes
-from Notes.serializers import NotesSerializer
+import user_auth
+from Notes.models import Notes, Labels
+from Notes.serializers import NotesSerializer, LabelsSerializer
 from user_auth.models import CustomUser
 
 
 # Create your views here.
 class NotesAPIView(APIView):
-
+    serializer_class = NotesSerializer
+    #@csrf_exempt
     def post(self, request):
         try:
+            request.data.update({'user': request.user.id})
             serializer = NotesSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({"message": "Registered Successfully", "data": serializer.data, "status": 201}, status=201)
+            return Response({"message": "Note Created Successfully", "data": serializer.data, "status": 201}, status=201)
         except Exception as e:
             return Response({'message': str(e)}, status=400)
 
     def get(self, request):
         try:
-            user_auth_id = request.query_params.get('user')
-            notes = Notes.objects.filter(user_id=user_auth_id)
+            notes = Notes.objects.filter(user=request.user)
             serializer = NotesSerializer(notes, many=True)
             return Response(serializer.data)
         except Exception as e:
             return Response({'message': str(e)}, status=400)
 
-    def put(self, request):
+    def put(self, request, note_id):
         try:
-            user_auth_id = request.data.get('user')
-            pk = request.data.get('id')
-            notes = Notes.objects.get(user_id=user_auth_id, id=pk)
+            request.data.update({'user': request.user.id})
+            notes = Notes.objects.get(id=note_id)
             serializer = NotesSerializer(notes, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -42,12 +49,100 @@ class NotesAPIView(APIView):
         except Exception as e:
             return Response({'message': str(e)}, status=400)
 
-    def delete(self, request):
+    def delete(self, request, note_id):
         try:
-            user_auth_id = request.data.get('user')
-            pk = request.data.get('id')
-            notes = Notes.objects.get(user_id=user_auth_id, id=pk)
+            notes = Notes.objects.get(id=note_id)
             notes.delete()
             return Response({"Message": "Note Deleted Successfully"}, status=204)
         except Exception as e:
             return Response({'message': str(e)}, status=400)
+
+
+class LabelsAPIView(APIView):
+    serializer_class = LabelsSerializer
+
+    def post(self, request):
+        try:
+            serializer = LabelsSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({"message": "Label Added Successfully", "data": serializer.data, "status": 201}, status=201)
+        except Exception as e:
+            return Response({'message': str(e)}, status=400)
+
+    def get(self, request):
+        try:
+            labels = Labels.objects.filter(user=request.user)
+            serializer = LabelsSerializer(labels, many=True)
+            return Response({"message": "Label retrieve Successfully", "data": serializer.data, "status": 201}, status=201)
+        except Exception as e:
+            return Response({'message': str(e)}, status=400)
+
+    def put(self, request, labels):
+        try:
+            serializer = LabelsSerializer(labels, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({'message': 'Labels updated successfully!', 'Data': serializer.data, 'status':201}, status=201)
+
+        except Exception as e:
+            return Response({'message': str(e)}, status=400)
+
+    def delete(self, request, pk):
+        try:
+            labels = Labels.objects.get(id=pk)
+            labels.delete()
+            return Response({"Message": "Labels Deleted Successfully"}, status=204)
+        except Exception as e:
+            return Response({'message': str(e)}, status=400)
+
+
+class ArchiveNoteList(APIView):
+    serializer_class = LabelsSerializer
+
+    # put method
+    def put(self, request, note_id):
+        try:
+            notes = Notes.objects.get(id=note_id)
+            if notes.isArchive == False:
+                notes.isArchive = True
+
+            else:
+                notes.isArchive = False
+                return Response({'message': 'isArchived updated not successfully!'})
+            notes.save()
+            return Response({'message': 'isArchived updated successfully!'})
+        except Exception as e:
+            return Response({'message': str(e)}, status=400)
+
+    def get(self, request):
+
+        notes = Notes.objects.filter(isArchive=True)
+        serializer = NotesSerializer(notes, many=True)
+        return Response(serializer.data)
+
+
+class TrashNotesAPIView(APIView):
+
+    def put(self, request, note_id):
+        try:
+            # note_id = request.data.get('id')
+            notes = Notes.objects.get(id=note_id)
+            if notes.isTrash == False:
+                notes.isTrash = True
+            else:
+                notes.isTrash = False
+                return Response({'success': False, 'message': 'Notes isTrash unsuccessful!'}, status=200)
+            notes.save()
+            return Response({'success': True, 'message': 'Notes isTrash successful!'}, status=200)
+        except Exception as e:
+            return Response({'message': str(e)}, status=400)
+
+
+    def get(self, request):
+
+        notes = Notes.objects.filter(isTrash=True)
+        serializer = NotesSerializer(notes, many=True)
+        return Response(serializer.data)
+
+

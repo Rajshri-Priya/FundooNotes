@@ -1,0 +1,78 @@
+02/17/2023 02:37:54 PM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 64, in parse
+    return json.load(decoded_stream, parse_constant=parse_constant)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\utils\json.py", line 31, in load
+    return json.load(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\json\__init__.py", line 359, in loads
+    return cls(**kw).decode(s)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\json\decoder.py", line 353, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+json.decoder.JSONDecodeError: Expecting ',' delimiter: line 8 column 15 (char 202)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 38, in put
+    request.data.update({'user': request.user.id})
+    ^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 216, in data
+    self._load_data_and_files()
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 279, in _load_data_and_files
+    self._data, self._files = self._parse()
+                              ^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 354, in _parse
+    parsed = parser.parse(stream, media_type, self.parser_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
+    raise ParseError('JSON parse error - %s' % str(exc))
+rest_framework.exceptions.ParseError: JSON parse error - Expecting ',' delimiter: line 8 column 15 (char 202)
+02/17/2023 02:37:54 PM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 64, in parse
+    return json.load(decoded_stream, parse_constant=parse_constant)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\utils\json.py", line 31, in load
+    return json.load(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\json\__init__.py", line 359, in loads
+    return cls(**kw).decode(s)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\json\decoder.py", line 353, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+json.decoder.JSONDecodeError: Expecting ',' delimiter: line 8 column 15 (char 202)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 38, in put
+    request.data.update({'user': request.user.id})
+    ^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 216, in data
+    self._load_data_and_files()
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 279, in _load_data_and_files
+    self._data, self._files = self._parse()
+                              ^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 354, in _parse
+    parsed = parser.parse(stream, media_type, self.parser_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
+    raise ParseError('JSON parse error - %s' % str(exc))
+rest_framework.exceptions.ParseError: JSON parse error - Expecting ',' delimiter: line 8 column 15 (char 202)

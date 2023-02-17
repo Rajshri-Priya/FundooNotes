@@ -30,7 +30,6 @@ class NotesSerializer(serializers.ModelSerializer):
         read_only_fields = ['label','collaborator']
 
     def create(self, validated_data):
-        print(validated_data)
         label_name = self.initial_data.get('label')
         notes = Notes.objects.create(**validated_data)
         label = Labels.objects.filter(name=label_name)

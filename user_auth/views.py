@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,6 +13,7 @@ from user_auth.serializers import CustomUserRegistrationSerializer, CustomUserLo
 
 
 class CustomUserRegistrationAPIView(APIView):
+    serializer_class = CustomUserRegistrationSerializer
 
     def post(self, request):
         serializer = CustomUserRegistrationSerializer(data=request.data)
@@ -44,12 +45,13 @@ class CustomUserRegistrationAPIView(APIView):
 # *********************************user-login Apiview*****************
 
 class CustomUserLoginAPIView(APIView):
+
+    serializer_class = CustomUserLoginSerializer
+
     def post(self, request):
         serializer = CustomUserLoginSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.validated_data
-            return Response({"message": "Login Successfully",
-                             "username": user.username,
-                             "email": user.email
-                             }, status=201 )
-        return Response({"message": "Login failed", "status": 202})
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+        login(request, serializer.context.get('user'))
+        return Response({"message": "Login Successfully"}, status=201)

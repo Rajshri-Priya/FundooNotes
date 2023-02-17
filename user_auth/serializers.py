@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from rest_framework import serializers
 from rest_framework.response import Response
 
@@ -20,13 +20,16 @@ class CustomUserRegistrationSerializer(serializers.ModelSerializer):
 
 
 class CustomUserLoginSerializer(serializers.Serializer):
+    """validation by manually"""
 
     username = serializers.CharField(max_length=100)
     password = serializers.CharField(max_length=100)
 
-    def validate(self, data):
-        user = authenticate(username=data['username'], password=data['password'])
+    def create(self, validated_data):
+        user = authenticate(username=validated_data['username'], password=validated_data['password'])
         # is_active is property
         if not user:
             raise serializers.ValidationError("Incorrect Credentials")
+        validated_data.update({'user': user})
+        self.context.update({'user': user})
         return user

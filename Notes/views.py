@@ -1,3 +1,4 @@
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Notes.models import Notes, Labels
@@ -12,6 +13,7 @@ logger = get_logger()
 class NotesAPIView(APIView):
     serializer_class = NotesSerializer
 
+    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='POST Add Notes')
     def post(self, request):
         try:
             request.data.update({'user': request.user.id})
@@ -37,6 +39,7 @@ class NotesAPIView(APIView):
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
+    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='PUT Update Notes')
     def put(self, request, note_id):
         try:
             request.data.update({'user': request.user.id})
@@ -51,6 +54,7 @@ class NotesAPIView(APIView):
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
+    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='DELETE Add Notes')
     def delete(self, request, note_id):
         try:
             notes = Notes.objects.get(id=note_id)
@@ -64,6 +68,7 @@ class NotesAPIView(APIView):
 class LabelsAPIView(APIView):
     serializer_class = LabelsSerializer
 
+    @swagger_auto_schema(request_body=LabelsSerializer, operation_summary='POST Add Labels')
     def post(self, request):
         try:
             serializer = LabelsSerializer(data=request.data)
@@ -85,6 +90,7 @@ class LabelsAPIView(APIView):
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
+    @swagger_auto_schema(request_body=LabelsSerializer, operation_summary='PUT Update Labels')
     def put(self, request, labels):
         try:
             serializer = LabelsSerializer(labels, data=request.data)
@@ -97,6 +103,7 @@ class LabelsAPIView(APIView):
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
+    @swagger_auto_schema(request_body=LabelsSerializer, operation_summary='DELETE Labels')
     def delete(self, request, pk):
         try:
             labels = Labels.objects.get(id=pk)
@@ -108,9 +115,9 @@ class LabelsAPIView(APIView):
 
 
 class ArchiveNoteList(APIView):
-    serializer_class = LabelsSerializer
+    serializer_class = NotesSerializer
 
-    # put method
+    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='PUT Add Archive')
     def put(self, request, note_id):
         try:
             notes = Notes.objects.get(id=note_id)
@@ -138,7 +145,7 @@ class ArchiveNoteList(APIView):
 
 
 class TrashNotesAPIView(APIView):
-
+    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='PUT Trash')
     def put(self, request, note_id):
         try:
             notes = Notes.objects.get(id=note_id)

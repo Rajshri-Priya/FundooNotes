@@ -1,4 +1,6 @@
 from django.contrib.auth import login
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from logging_confiq.logger import get_logger
@@ -14,6 +16,7 @@ logger = get_logger()
 class CustomUserRegistrationAPIView(APIView):
     serializer_class = CustomUserRegistrationSerializer
 
+    @swagger_auto_schema(request_body=CustomUserRegistrationSerializer, operation_summary='POST User Registeration')
     def post(self, request):
         try:
             serializer = CustomUserRegistrationSerializer(data=request.data)
@@ -35,6 +38,7 @@ class CustomUserRegistrationAPIView(APIView):
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
+    @swagger_auto_schema(request_body=CustomUserRegistrationSerializer, operation_summary='PUT User Registeration')
     def put(self, request, pk):
         try:
             user = CustomUser.objects.get(id=pk)
@@ -46,6 +50,8 @@ class CustomUserRegistrationAPIView(APIView):
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
+
+    @swagger_auto_schema(request_body=CustomUserRegistrationSerializer, operation_summary='DELETE User Registeration')
 
     def delete(self, request, pk):
         try:
@@ -62,6 +68,8 @@ class CustomUserRegistrationAPIView(APIView):
 class CustomUserLoginAPIView(APIView):
     serializer_class = CustomUserLoginSerializer
 
+    @swagger_auto_schema(request_body=CustomUserLoginSerializer, operation_summary='POST User Login')
+
     def post(self, request):
         try:
             serializer = CustomUserLoginSerializer(data=request.data)
@@ -73,3 +81,5 @@ class CustomUserLoginAPIView(APIView):
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
+
+

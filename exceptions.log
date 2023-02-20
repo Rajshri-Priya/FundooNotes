@@ -76,3 +76,31 @@ Traceback (most recent call last):
   File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
     raise ParseError('JSON parse error - %s' % str(exc))
 rest_framework.exceptions.ParseError: JSON parse error - Expecting ',' delimiter: line 8 column 15 (char 202)
+02/18/2023 12:26:05 PM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 19, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
+    raise ValidationError(self.errors)
+rest_framework.exceptions.ValidationError: {'title': [ErrorDetail(string='This field is required.', code='required')], 'description': [ErrorDetail(string='This field is required.', code='required')]}
+02/18/2023 12:26:05 PM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 19, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
+    raise ValidationError(self.errors)
+rest_framework.exceptions.ValidationError: {'title': [ErrorDetail(string='This field is required.', code='required')], 'description': [ErrorDetail(string='This field is required.', code='required')]}
+02/18/2023 12:32:28 PM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\user_auth\views.py", line 68, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
+    raise ValidationError(self.errors)
+rest_framework.exceptions.ValidationError: {'username': [ErrorDetail(string='This field is required.', code='required')], 'password': [ErrorDetail(string='This field is required.', code='required')]}
+02/18/2023 12:32:28 PM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\user_auth\views.py", line 68, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
+    raise ValidationError(self.errors)
+rest_framework.exceptions.ValidationError: {'username': [ErrorDetail(string='This field is required.', code='required')], 'password': [ErrorDetail(string='This field is required.', code='required')]}

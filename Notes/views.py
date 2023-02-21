@@ -2,7 +2,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Notes.models import Notes, Labels
-from Notes.serializers import NotesSerializer, LabelsSerializer
+from Notes.serializers import NotesSerializer,  LabelsSerializer
 from logging_confiq.logger import get_logger
 
 # logger config
@@ -59,7 +59,7 @@ class NotesAPIView(APIView):
         try:
             notes = Notes.objects.get(id=note_id)
             notes.delete()
-            return Response({"success": True, "Message": "Note Deleted Successfully", "status": 204}, status=204)
+            return Response({"success": True, "Message": "Note Deleted Successfully", "status": 200}, status=200)
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
@@ -73,7 +73,8 @@ class LabelsAPIView(APIView):
         try:
             serializer = LabelsSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            serializer.save(user=request.user)
+            #serializer.save()
             return Response({"success": True, "message": "Label Added Successfully", "data": serializer.data,
                              "status": 201}, status=201)
         except Exception as e:
@@ -91,9 +92,10 @@ class LabelsAPIView(APIView):
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
     @swagger_auto_schema(request_body=LabelsSerializer, operation_summary='PUT Update Labels')
-    def put(self, request, labels):
+    def put(self, request, label_name):
         try:
-            serializer = LabelsSerializer(labels, data=request.data)
+            label = Labels.objects.get(name=label_name, user=request.user)
+            serializer = LabelsSerializer(label, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response({"success": True, 'message': 'Labels updated successfully!', 'Data': serializer.data,
@@ -103,12 +105,12 @@ class LabelsAPIView(APIView):
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
-    @swagger_auto_schema(request_body=LabelsSerializer, operation_summary='DELETE Labels')
-    def delete(self, request, pk):
+    # @swagger_auto_schema(request_body=DisplayLabelsSerializer, operation_summary='DELETE Labels')
+    def delete(self, request, label_name):
         try:
-            labels = Labels.objects.get(id=pk)
+            labels = Labels.objects.get(name=label_name, user=request.user)
             labels.delete()
-            return Response({"success": True, "Message": "Labels Deleted Successfully"}, status=204)
+            return Response({"success": True, "Message": "Labels Deleted Successfully"}, status=200)
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)

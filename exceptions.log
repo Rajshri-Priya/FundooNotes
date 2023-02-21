@@ -1,106 +1,144 @@
-02/17/2023 02:37:54 PM : logging_confiq.logger : 
+02/21/2023 09:23:16 AM : logging_confiq.logger : 
 Traceback (most recent call last):
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 64, in parse
-    return json.load(decoded_stream, parse_constant=parse_constant)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\utils\json.py", line 31, in load
-    return json.load(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Python311\Lib\json\__init__.py", line 293, in load
-    return loads(fp.read(),
-           ^^^^^^^^^^^^^^^^
-  File "C:\Python311\Lib\json\__init__.py", line 359, in loads
-    return cls(**kw).decode(s)
-           ^^^^^^^^^^^^^^^^^^^
-  File "C:\Python311\Lib\json\decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Python311\Lib\json\decoder.py", line 353, in raw_decode
-    obj, end = self.scan_once(s, idx)
-               ^^^^^^^^^^^^^^^^^^^^^^
-json.decoder.JSONDecodeError: Expecting ',' delimiter: line 8 column 15 (char 202)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 38, in put
-    request.data.update({'user': request.user.id})
-    ^^^^^^^^^^^^
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 216, in data
-    self._load_data_and_files()
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 279, in _load_data_and_files
-    self._data, self._files = self._parse()
-                              ^^^^^^^^^^^^^
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 354, in _parse
-    parsed = parser.parse(stream, media_type, self.parser_context)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
-    raise ParseError('JSON parse error - %s' % str(exc))
-rest_framework.exceptions.ParseError: JSON parse error - Expecting ',' delimiter: line 8 column 15 (char 202)
-02/17/2023 02:37:54 PM : logging_confiq.logger : 
-Traceback (most recent call last):
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 64, in parse
-    return json.load(decoded_stream, parse_constant=parse_constant)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\utils\json.py", line 31, in load
-    return json.load(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Python311\Lib\json\__init__.py", line 293, in load
-    return loads(fp.read(),
-           ^^^^^^^^^^^^^^^^
-  File "C:\Python311\Lib\json\__init__.py", line 359, in loads
-    return cls(**kw).decode(s)
-           ^^^^^^^^^^^^^^^^^^^
-  File "C:\Python311\Lib\json\decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Python311\Lib\json\decoder.py", line 353, in raw_decode
-    obj, end = self.scan_once(s, idx)
-               ^^^^^^^^^^^^^^^^^^^^^^
-json.decoder.JSONDecodeError: Expecting ',' delimiter: line 8 column 15 (char 202)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 38, in put
-    request.data.update({'user': request.user.id})
-    ^^^^^^^^^^^^
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 216, in data
-    self._load_data_and_files()
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 279, in _load_data_and_files
-    self._data, self._files = self._parse()
-                              ^^^^^^^^^^^^^
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\request.py", line 354, in _parse
-    parsed = parser.parse(stream, media_type, self.parser_context)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
-    raise ParseError('JSON parse error - %s' % str(exc))
-rest_framework.exceptions.ParseError: JSON parse error - Expecting ',' delimiter: line 8 column 15 (char 202)
-02/18/2023 12:26:05 PM : logging_confiq.logger : 
-Traceback (most recent call last):
-  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 19, in post
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 98, in put
     serializer.is_valid(raise_exception=True)
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
-    raise ValidationError(self.errors)
-rest_framework.exceptions.ValidationError: {'title': [ErrorDetail(string='This field is required.', code='required')], 'description': [ErrorDetail(string='This field is required.', code='required')]}
-02/18/2023 12:26:05 PM : logging_confiq.logger : 
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 227, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 426, in run_validation
+    value = self.to_internal_value(data)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 483, in to_internal_value
+    validated_value = field.run_validation(primitive_value)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\fields.py", line 544, in run_validation
+    (is_empty_value, data) = self.validate_empty_values(data)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\fields.py", line 520, in validate_empty_values
+    return (True, self.get_default())
+                  ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\fields.py", line 495, in get_default
+    return self.default(self)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\fields.py", line 279, in __call__
+    return serializer_field.context['request'].user
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'request'
+02/21/2023 09:23:16 AM : logging_confiq.logger : 
 Traceback (most recent call last):
-  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 19, in post
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 98, in put
     serializer.is_valid(raise_exception=True)
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
-    raise ValidationError(self.errors)
-rest_framework.exceptions.ValidationError: {'title': [ErrorDetail(string='This field is required.', code='required')], 'description': [ErrorDetail(string='This field is required.', code='required')]}
-02/18/2023 12:32:28 PM : logging_confiq.logger : 
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 227, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 426, in run_validation
+    value = self.to_internal_value(data)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 483, in to_internal_value
+    validated_value = field.run_validation(primitive_value)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\fields.py", line 544, in run_validation
+    (is_empty_value, data) = self.validate_empty_values(data)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\fields.py", line 520, in validate_empty_values
+    return (True, self.get_default())
+                  ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\fields.py", line 495, in get_default
+    return self.default(self)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\fields.py", line 279, in __call__
+    return serializer_field.context['request'].user
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'request'
+02/21/2023 09:46:00 AM : logging_confiq.logger : 
 Traceback (most recent call last):
-  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\user_auth\views.py", line 68, in post
-    serializer.is_valid(raise_exception=True)
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
-    raise ValidationError(self.errors)
-rest_framework.exceptions.ValidationError: {'username': [ErrorDetail(string='This field is required.', code='required')], 'password': [ErrorDetail(string='This field is required.', code='required')]}
-02/18/2023 12:32:28 PM : logging_confiq.logger : 
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 74, in post
+    serializer = DisplayLabelsSerializer(data=request.data, user=request.user)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 116, in __init__
+    super().__init__(**kwargs)
+TypeError: Field.__init__() got an unexpected keyword argument 'user'
+02/21/2023 09:46:00 AM : logging_confiq.logger : 
 Traceback (most recent call last):
-  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\user_auth\views.py", line 68, in post
-    serializer.is_valid(raise_exception=True)
-  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
-    raise ValidationError(self.errors)
-rest_framework.exceptions.ValidationError: {'username': [ErrorDetail(string='This field is required.', code='required')], 'password': [ErrorDetail(string='This field is required.', code='required')]}
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 74, in post
+    serializer = DisplayLabelsSerializer(data=request.data, user=request.user)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 116, in __init__
+    super().__init__(**kwargs)
+TypeError: Field.__init__() got an unexpected keyword argument 'user'
+02/21/2023 09:50:35 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 74, in post
+    serializer = DisplayLabelsSerializer(data=request.data, user=request.user)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 116, in __init__
+    super().__init__(**kwargs)
+TypeError: Field.__init__() got an unexpected keyword argument 'user'
+02/21/2023 09:50:35 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 74, in post
+    serializer = DisplayLabelsSerializer(data=request.data, user=request.user)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 116, in __init__
+    super().__init__(**kwargs)
+TypeError: Field.__init__() got an unexpected keyword argument 'user'
+02/21/2023 09:50:37 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 74, in post
+    serializer = DisplayLabelsSerializer(data=request.data, user=request.user)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 116, in __init__
+    super().__init__(**kwargs)
+TypeError: Field.__init__() got an unexpected keyword argument 'user'
+02/21/2023 09:50:37 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 74, in post
+    serializer = DisplayLabelsSerializer(data=request.data, user=request.user)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\rest_framework\serializers.py", line 116, in __init__
+    super().__init__(**kwargs)
+TypeError: Field.__init__() got an unexpected keyword argument 'user'
+02/21/2023 10:28:09 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 111, in delete
+    labels = Labels.objects.get(name=label_name, user=request.user)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\query.py", line 650, in get
+    raise self.model.DoesNotExist(
+Notes.models.Labels.DoesNotExist: Labels matching query does not exist.
+02/21/2023 10:28:09 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 111, in delete
+    labels = Labels.objects.get(name=label_name, user=request.user)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\query.py", line 650, in get
+    raise self.model.DoesNotExist(
+Notes.models.Labels.DoesNotExist: Labels matching query does not exist.
+02/21/2023 10:31:01 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 111, in delete
+    labels = Labels.objects.get(name=label_name, user=request.user)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\query.py", line 650, in get
+    raise self.model.DoesNotExist(
+Notes.models.Labels.DoesNotExist: Labels matching query does not exist.
+02/21/2023 10:31:01 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 111, in delete
+    labels = Labels.objects.get(name=label_name, user=request.user)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\query.py", line 650, in get
+    raise self.model.DoesNotExist(
+Notes.models.Labels.DoesNotExist: Labels matching query does not exist.

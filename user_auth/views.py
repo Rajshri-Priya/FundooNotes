@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from logging_confiq.logger import get_logger
 from user_auth.models import CustomUser
 from user_auth.serializers import CustomUserRegistrationSerializer, CustomUserLoginSerializer
-
+from rest_framework_simplejwt.authentication import JWTAuthentication
 # logging config
 logger = get_logger()
 

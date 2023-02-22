@@ -1,6 +1,12 @@
+from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.views import TokenRefreshView
+
 from Notes.models import Notes, Labels
 from Notes.serializers import NotesSerializer,  LabelsSerializer
 from logging_confiq.logger import get_logger
@@ -12,6 +18,8 @@ logger = get_logger()
 # Create your views here.
 class NotesAPIView(APIView):
     serializer_class = NotesSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=NotesSerializer, operation_summary='POST Add Notes')
     def post(self, request):
@@ -54,7 +62,7 @@ class NotesAPIView(APIView):
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
-    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='DELETE Add Notes')
+    # @swagger_auto_schema(request_body=NotesSerializer, operation_summary='DELETE Add Notes')
     def delete(self, request, note_id):
         try:
             notes = Notes.objects.get(id=note_id)
@@ -67,6 +75,8 @@ class NotesAPIView(APIView):
 
 class LabelsAPIView(APIView):
     serializer_class = LabelsSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=LabelsSerializer, operation_summary='POST Add Labels')
     def post(self, request):
@@ -118,6 +128,8 @@ class LabelsAPIView(APIView):
 
 class ArchiveNoteList(APIView):
     serializer_class = NotesSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=NotesSerializer, operation_summary='PUT Add Archive')
     def put(self, request, note_id):
@@ -147,6 +159,10 @@ class ArchiveNoteList(APIView):
 
 
 class TrashNotesAPIView(APIView):
+    serializer_class = NotesSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @swagger_auto_schema(request_body=NotesSerializer, operation_summary='PUT Trash')
     def put(self, request, note_id):
         try:
@@ -171,3 +187,5 @@ class TrashNotesAPIView(APIView):
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
+
+

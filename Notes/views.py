@@ -1,13 +1,11 @@
-from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.views import TokenRefreshView
 
 from Notes.models import Notes, Labels
+from Notes.redis_utils import RedisCrud
 from Notes.serializers import NotesSerializer,  LabelsSerializer
 from logging_confiq.logger import get_logger
 
@@ -28,6 +26,9 @@ class NotesAPIView(APIView):
             serializer = NotesSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+
+            # Store note data in Redis
+            RedisCrud().save_note_in_redis(serializer.data, request.user.id)
             return Response(
                 {"success": True, "message": "Note Created Successfully", "data": serializer.data, "status": 201},
                 status=201)
@@ -40,6 +41,10 @@ class NotesAPIView(APIView):
         try:
             notes = Notes.objects.filter(user=request.user)
             serializer = NotesSerializer(notes, many=True)
+
+            # retrieve note data in by user
+            RedisCrud().get_notes_by_user_id(request.user)
+
             return Response(
                 {"success": True, "message": "Note Retrieved Successfully", "data": serializer.data, "status": 201},
                 status=201)
@@ -53,8 +58,12 @@ class NotesAPIView(APIView):
             request.data.update({'user': request.user.id})
             notes = Notes.objects.get(id=note_id)
             serializer = NotesSerializer(notes, data=request.data)
+            print(request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            RedisCrud().update_note_in_redis(note_id, request.data, request.user.id)
+
+            # Store updated note data in Redis
             return Response({"success": True, 'message': 'Note updated successfully!', 'Data': serializer.data,
                              "status": 201}, status=201)
 
@@ -65,8 +74,10 @@ class NotesAPIView(APIView):
     # @swagger_auto_schema(request_body=NotesSerializer, operation_summary='DELETE Add Notes')
     def delete(self, request, note_id):
         try:
-            notes = Notes.objects.get(id=note_id)
-            notes.delete()
+            # notes = Notes.objects.get(id=note_id)
+            # notes.delete()
+            RedisCrud().delete_note_in_redis(note_id, request.user)
+
             return Response({"success": True, "Message": "Note Deleted Successfully", "status": 200}, status=200)
         except Exception as e:
             logger.exception(e)

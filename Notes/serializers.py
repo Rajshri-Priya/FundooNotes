@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from Notes.models import Notes, Labels
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 
 
 class LabelsSerializer(serializers.ModelSerializer):
@@ -29,3 +30,5 @@ class NotesSerializer(serializers.ModelSerializer):
         label = Labels.objects.create(name=label_name, user=validated_data.get("user"))
         notes.label.add(label)
         return notes
+
+

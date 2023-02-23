@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+import redis
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,7 +88,12 @@ DATABASES = {
         'PASSWORD': '123',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-    }
+    },
+    # 'redis': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.redis',
+    # }
+
 }
 
 # Password validation
@@ -213,3 +219,10 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+# redis configuration
+# REDIS_HOST = 'localhost'
+# REDIS_PORT = 6379
+# REDIS_DB = 0
+#
+# REDIS_CLIENT = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)

@@ -9,3 +9,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+# method,url,user,count,created at, updated at----userlog model
+# middleware-->logic --save the data
+# for label or new url it create new row

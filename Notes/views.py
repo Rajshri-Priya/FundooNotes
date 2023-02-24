@@ -39,14 +39,17 @@ class NotesAPIView(APIView):
 
     def get(self, request):
         try:
+            # retrieve note data in by user
+            redis_data = RedisCrud().get_notes_by_user_id(request.user)
+            if redis_data:
+                return Response(
+                    {"success": True, "message": "Note Retrieved Successfully", "data": redis_data, "status": 200},
+                    status=201)
+
             notes = Notes.objects.filter(user=request.user)
             serializer = NotesSerializer(notes, many=True)
-
-            # retrieve note data in by user
-            RedisCrud().get_notes_by_user_id(request.user)
-
             return Response(
-                {"success": True, "message": "Note Retrieved Successfully", "data": serializer.data, "status": 201},
+                {"success": True, "message": "Note Retrieved Successfully", "data": serializer.data, "status": 200},
                 status=201)
         except Exception as e:
             logger.exception(e)
@@ -58,12 +61,12 @@ class NotesAPIView(APIView):
             request.data.update({'user': request.user.id})
             notes = Notes.objects.get(id=note_id)
             serializer = NotesSerializer(notes, data=request.data)
-            print(request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            RedisCrud().update_note_in_redis(note_id, request.data, request.user.id)
 
             # Store updated note data in Redis
+            RedisCrud().update_note_in_redis(note_id, request.data, request.user.id)
+
             return Response({"success": True, 'message': 'Note updated successfully!', 'Data': serializer.data,
                              "status": 201}, status=201)
 
@@ -74,8 +77,9 @@ class NotesAPIView(APIView):
     # @swagger_auto_schema(request_body=NotesSerializer, operation_summary='DELETE Add Notes')
     def delete(self, request, note_id):
         try:
-            # notes = Notes.objects.get(id=note_id)
-            # notes.delete()
+            notes = Notes.objects.get(id=note_id)
+            notes.delete()
+
             RedisCrud().delete_note_in_redis(note_id, request.user)
 
             return Response({"success": True, "Message": "Note Deleted Successfully", "status": 200}, status=200)

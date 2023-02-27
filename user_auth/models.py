@@ -9,6 +9,15 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
-# method,url,user,count,created at, updated at----userlog model
-# middleware-->logic --save the data
-# for label or new url it create new row
+
+
+class UserLog(models.Model):
+    method = models.CharField(max_length=10)
+    url = models.CharField(max_length=255)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    count = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user} {self.method} {self.url} {self.count}"

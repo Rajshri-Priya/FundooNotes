@@ -26,12 +26,10 @@ class CustomUserLoginSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=100)
 
     def create(self, validated_data):
-        print(validated_data)
         user = authenticate(username=validated_data['username'], password=validated_data['password'])
         # is_active is property
         if not user:
             raise serializers.ValidationError("Incorrect Credentials")
         validated_data.update({'user': user})
-        print(validated_data)
         self.context.update({'user': user})
         return user

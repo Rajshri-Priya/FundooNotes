@@ -23,6 +23,7 @@ class NotesSerializer(serializers.ModelSerializer):
         label_name = self.initial_data.get('label')
         notes = Notes.objects.create(**validated_data)
         label = Labels.objects.filter(name=label_name)
+
         if label.exists():
             notes.label.add(label.first())
             return notes

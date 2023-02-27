@@ -17,7 +17,7 @@ class RedisStore:
 
     def get(self, key):
         return redis_client.get(key)
-
+#
 
 class RedisCrud:
     def __init__(self):
@@ -39,7 +39,7 @@ class RedisCrud:
         notes_dict = json.loads(self.redis.get(str(user_id)))
         if notes_dict is None:
             return {}
-        return notes_dict.values()
+        return notes_dict.items()
 
     def update_note_in_redis(self, note_id, new_note_data, user_id):
         notes_dict = self.redis.get(str(user_id))
@@ -57,11 +57,9 @@ class RedisCrud:
     def delete_note_in_redis(self, note_id, user):
         user_id = str(user.id)
         notes_dict = self.redis.get(user_id)
-        # print(notes_dict)
         if notes_dict is not None:
             notes_dict = json.loads(notes_dict)
             note = notes_dict.get(str(note_id))
-            print(note)
             if note:
                 notes_dict.pop(str(note_id))
                 self.redis.set(user_id, json.dumps(notes_dict))

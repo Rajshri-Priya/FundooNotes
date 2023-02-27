@@ -98,14 +98,13 @@ class LogoutView(APIView):
         This class is used for the User logout
     """
 
-    def post(self, request):
+    def get(self, request):
         try:
             # Check if user is authenticated
             if request.user.is_authenticated:
                 # Logout user
                 logout(request)
                 # Redirect to login page
-                # return HttpResponseRedirect(reverse('login'))
                 return Response({'message': 'logout successfully.'})
             else:
                 return Response({'message': 'You are not logged in.'})
@@ -113,9 +112,3 @@ class LogoutView(APIView):
             logger.exception(e)
             return Response({'message': 'An error occurred during logout: {}'.format(str(e))})
 
-    # authentication_classes = [JWTAuthentication]
-    #
-    # def post(self, request, *args, **kwargs):
-    #     # Blacklist the token
-    #     request.user.auth_token.delete()
-    #     return Response({'message': 'logout successfully.'}, status=204)

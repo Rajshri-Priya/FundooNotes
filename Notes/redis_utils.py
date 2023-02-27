@@ -39,7 +39,7 @@ class RedisCrud:
         notes_dict = json.loads(self.redis.get(str(user_id)))
         if notes_dict is None:
             return {}
-        return notes_dict.values()
+        return notes_dict.items()
 
     def update_note_in_redis(self, note_id, new_note_data, user_id):
         notes_dict = self.redis.get(str(user_id))

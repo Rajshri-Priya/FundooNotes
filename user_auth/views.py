@@ -8,7 +8,6 @@ from rest_framework.views import APIView
 from logging_confiq.logger import get_logger
 from user_auth.models import CustomUser
 from user_auth.serializers import CustomUserRegistrationSerializer, CustomUserLoginSerializer
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # logging config
 logger = get_logger()
@@ -75,8 +74,9 @@ class CustomUserLoginAPIView(APIView):
         This class is used for the User login
     """
     serializer_class = CustomUserLoginSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=CustomUserLoginSerializer, operation_summary='POST User Login')
     def post(self, request):
@@ -89,10 +89,9 @@ class CustomUserLoginAPIView(APIView):
             return Response({"success": True, "message": "Login Successfully", "status": 201}, status=201)
         except Exception as e:
             logger.exception(e)
-            return Response({"success": False, "message": str(e), "status": 400}, status=400)
+            return Response({"success": False, "message": str(e), "status": 401}, status=401)
 
 
-# @swagger_auto_schema(request_body=CustomUserLoginSerializer, operation_summary='POST User Login')
 class LogoutView(APIView):
     """
         This class is used for the User logout
@@ -111,4 +110,3 @@ class LogoutView(APIView):
         except Exception as e:
             logger.exception(e)
             return Response({'message': 'An error occurred during logout: {}'.format(str(e))})
-

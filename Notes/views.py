@@ -30,8 +30,8 @@ class NotesAPIView(APIView):
             # Store note data in Redis
             RedisCrud().save_note_in_redis(serializer.data, request.user.id)
             return Response(
-                {"success": True, "message": "Note Created Successfully", "data": serializer.data, "status": 201},
-                status=201)
+                {"success": True, "message": "Note Created Successfully", "data": serializer.data, "status": 200},
+                status=200)
         except Exception as e:
             # logger.exception(e.args[0])==> print specific exception message
             logger.exception(e)
@@ -44,13 +44,13 @@ class NotesAPIView(APIView):
             if redis_data:
                 return Response(
                     {"success": True, "message": "Note Retrieved Successfully", "data": redis_data, "status": 200},
-                    status=201)
+                    status=200)
 
             notes = Notes.objects.filter(user=request.user)
             serializer = NotesSerializer(notes, many=True)
             return Response(
                 {"success": True, "message": "Note Retrieved Successfully", "data": serializer.data, "status": 200},
-                status=201)
+                status=200)
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
@@ -68,7 +68,7 @@ class NotesAPIView(APIView):
             RedisCrud().update_note_in_redis(note_id, request.data, request.user.id)
 
             return Response({"success": True, 'message': 'Note updated successfully!', 'Data': serializer.data,
-                             "status": 201}, status=201)
+                             "status": 200}, status=200)
 
         except Exception as e:
             logger.exception(e)
@@ -111,7 +111,7 @@ class LabelsAPIView(APIView):
             labels = Labels.objects.filter(user=request.user)
             serializer = LabelsSerializer(labels, many=True)
             return Response({"success": True, "message": "Label retrieve Successfully", "data": serializer.data,
-                             "status": 201}, status=201)
+                             "status": 200}, status=200)
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
@@ -124,7 +124,7 @@ class LabelsAPIView(APIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response({"success": True, 'message': 'Labels updated successfully!', 'Data': serializer.data,
-                             'status': 201}, status=201)
+                             'status': 200}, status=200)
 
         except Exception as e:
             logger.exception(e)

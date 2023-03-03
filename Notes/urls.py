@@ -4,7 +4,7 @@ from Notes import views
 
 urlpatterns = [
     path('note', views.NotesAPIView.as_view(), name='Notes'),
-    path('note/<int:note_id>/', views.NotesAPIView.as_view(), name='Notes_update_delete'),
+    path('note/<int:note_id>/', views.NotesAPIView.as_view(), name='note_id'),
     path('label', views.LabelsAPIView.as_view(), name='label'),
     path('label/<str:label_name>/', views.LabelsAPIView.as_view(), name='label_name'),
     path('archive', views.ArchiveNoteList.as_view(), name='archive'),

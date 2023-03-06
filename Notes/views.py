@@ -1,3 +1,4 @@
+from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -6,8 +7,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from Notes.models import Notes, Labels
 from Notes.redis_utils import RedisCrud
-from Notes.serializers import NotesSerializer,  LabelsSerializer
+from Notes.serializers import NotesSerializer, LabelsSerializer
 from logging_confiq.logger import get_logger
+from user_auth.models import CustomUser
+from Notes.serializers import get_collaborator
 
 # logger config
 logger = get_logger()
@@ -46,7 +49,8 @@ class NotesAPIView(APIView):
                     {"success": True, "message": "Note Retrieved Successfully", "data": redis_data, "status": 200},
                     status=200)
 
-            notes = Notes.objects.filter(user=request.user)
+            # notes = Notes.objects.filter(user=request.user)
+            notes = Notes.objects.filter(Q(user__id=request.user.id) | Q(collaborator__id=request.user.id)).distinct()
             serializer = NotesSerializer(notes, many=True)
             return Response(
                 {"success": True, "message": "Note Retrieved Successfully", "data": serializer.data, "status": 200},
@@ -204,3 +208,43 @@ class TrashNotesAPIView(APIView):
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
 
+class NotesCollaboratorAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, note_id):
+        try:
+            note = Notes.objects.get(pk=note_id)
+            # user_id = request.data.get('user_id')
+            # user = CustomUser.objects.get(pk=user_id)
+
+            collaborator_data = request.data.get('collaborator')
+            if collaborator_data is not None:
+                collaborator = get_collaborator(self, collaborator_data)
+            else:
+                return Response({'message': 'Collaborator data is missing.'}, status=400)
+
+            note.collaborator.add(collaborator)
+            # note.collaborator.add(user)
+            return Response({'message': f'Added collaborator with id {collaborator.id} to note with id {note_id}'},
+                            status=200)
+        except Exception as e:
+            logger.exception(e)
+            return Response({"success": False, "message": str(e), "status": 400}, status=400)
+
+    def delete(self, request, note_id, user_id):
+        try:
+            note = Notes.objects.get(pk=note_id)
+            user = CustomUser.objects.get(pk=user_id)
+            if user in note.collaborator.all():
+                note.collaborator.remove(user)
+                return Response(
+                    {'message': f'Successfully removed collaborator with id {user_id} from note with id {note_id}'},
+                    status=200)
+            else:
+                return Response(
+                    {'message': f'Collaborator with id {user_id} is not associated with note with id {note_id}'},
+                    status=400)
+        except Exception as e:
+            logger.exception(e)
+            return Response({"success": False, "message": str(e), "status": 400})

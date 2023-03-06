@@ -1,6 +1,29 @@
 from rest_framework import serializers
+from rest_framework.response import Response
+
 from Notes.models import Notes, Labels
 from user_auth.models import CustomUser
+from logging_confiq.logger import get_logger
+
+# logger config
+logger = get_logger()
+
+
+def get_collaborator(self, collaborator_data):
+    try:
+        if isinstance(collaborator_data, int):  # Check if collaborator_data is an integer (user ID)
+            return CustomUser.objects.filter(id=collaborator_data).first()  # Retrieve user with given ID
+        elif isinstance(collaborator_data, str):  # Check if collaborator_data is a string
+            if '@' in collaborator_data:  # If input is email
+                return CustomUser.objects.filter(email=collaborator_data).first()  # Retrieve user with  given email
+            else:  # If input is username
+                return CustomUser.objects.filter(
+                    username=collaborator_data).first()  # Retrieve user with given username
+        else:  # If collaborator_data is not an integer or a string, return None
+            return None
+    except Exception as e:
+        logger.exception(e)
+        return Response({"success": False, "message": str(e), "status": 400})
 
 
 class LabelsSerializer(serializers.ModelSerializer):
@@ -10,8 +33,15 @@ class LabelsSerializer(serializers.ModelSerializer):
         extra_kwargs = {'user': {'required': True}}
 
 
+class CustomUserUsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['email']
+
+
 class NotesSerializer(serializers.ModelSerializer):
-    label = LabelsSerializer(many=True, read_only=True)
+    label = LabelsSerializer(many=True, read_only=True)  # for display collaborator by its name
+    collaborator = CustomUserUsernameSerializer(many=True, read_only=True)  # for display collaborator by its email
 
     class Meta:
         model = Notes
@@ -21,7 +51,7 @@ class NotesSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         collaborator_data = self.initial_data.get('collaborator', [])
-        collaborators = [get_collaborator(data) for data in collaborator_data]
+        collaborators = [get_collaborator(self, data) for data in collaborator_data]
         collaborators = [collaborator for collaborator in collaborators if collaborator is not None]
 
         label_name = self.initial_data.get('label')
@@ -38,12 +68,4 @@ class NotesSerializer(serializers.ModelSerializer):
         label = Labels.objects.create(name=label_name, user=validated_data.get("user"))
         notes.label.add(label)
         return notes
-
-
-def get_collaborator(self, collaborator_data):
-    if collaborator_data.isdigit():  # If input is user_id
-        return CustomUser.objects.filter(id=collaborator_data).first()
-    elif '@' in collaborator_data:  # If input is email
-        return CustomUser.objects.filter(email=collaborator_data).first()
-    else:  # If input is username
-        return CustomUser.objects.filter(username=collaborator_data).first()
+# isinstance,jinjatemplate,monothelic,

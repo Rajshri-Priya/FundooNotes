@@ -33,13 +33,10 @@ class TestNotes(TestSetUp):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
         # Test creating a new note with missing fields
         note_data = {
-            # "title": "My Note",
-            "description": "This is a test note",  # got bad request
-            # "isArchive": False,
-            # "isTrash": False,
-            # "color": "white"
 
-            # we can create empty note in google keep but there we required title, description only
+            "description": "This is a test note",  # got bad request
+
+            # we can create empty note in google keep but there we required , description only
             # by postman we need to try it
         }
         response = self.client.post(self.notes_url, note_data, format='json')

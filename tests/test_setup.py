@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase, APIClient
 class TestSetUp(APITestCase):
 
     def setUp(self):
-        self.notes_url = reverse('Notes')
+        self.notes_url = reverse('notes')
         self.register_url = reverse('signup')
         self.login_url = reverse('login')
         self.token_url = reverse('token_obtain_pair')

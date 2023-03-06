@@ -153,22 +153,25 @@ class ArchiveNoteList(APIView):
     @swagger_auto_schema(request_body=NotesSerializer, operation_summary='PUT Add Archive')
     def put(self, request, note_id):
         try:
-            notes = Notes.objects.get(id=note_id)
-            if notes.isArchive == False:
-                notes.isArchive = True
-
+            notes = Notes.objects.get(id=note_id, user=request.user).first()
+            if notes:
+                if notes.isArchive == False:
+                    notes.isArchive = True
+                else:
+                    notes.isArchive = False
+                    return Response({"success": False, 'message': 'isArchived updated not successfully!'}, status=200)
+                notes.save()
+                return Response({"success": True, 'message': 'isArchived updated successfully!'}, status=200)
             else:
-                notes.isArchive = False
-                return Response({"success": False, 'message': 'isArchived updated not successfully!'}, status=200)
-            notes.save()
-            return Response({"success": True, 'message': 'isArchived updated successfully!'}, status=200)
+                return Response({"success": False, 'message': 'Note does not exist or does not belong to user!'},
+                                status=400)
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
     def get(self, request):
         try:
-            notes = Notes.objects.filter(isArchive=True)
+            notes = Notes.objects.filter(user=request.user, isArchive=True)
             serializer = NotesSerializer(notes, many=True)
             return Response({"success": True, 'message': 'isArchived retrieve successfully!', 'Data': serializer.data,
                              'status': 201}, status=201)
@@ -185,21 +188,27 @@ class TrashNotesAPIView(APIView):
     @swagger_auto_schema(request_body=NotesSerializer, operation_summary='PUT Trash')
     def put(self, request, note_id):
         try:
-            notes = Notes.objects.get(id=note_id)
-            if notes.isTrash == False:
-                notes.isTrash = True
+            notes = Notes.objects.get(id=note_id, user=request.user)
+            if notes:
+                if notes.isTrash == False:
+                    notes.isTrash = True
+                else:
+                    notes.isTrash = False
+                    return Response({'success': False, 'message': 'Notes isTrash unsuccessful!'}, status=200)
+                notes.save()
+                return Response({'success': True, 'message': 'Notes isTrash successful!'}, status=200)
             else:
-                notes.isTrash = False
-                return Response({'success': False, 'message': 'Notes isTrash unsuccessful!'}, status=200)
-            notes.save()
-            return Response({'success': True, 'message': 'Notes isTrash successful!'}, status=200)
+                return Response({"success": False, 'message': 'Note does not exist or does not belong to user!'},
+                                status=400)
+
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
     def get(self, request):
         try:
-            notes = Notes.objects.filter(isTrash=True)
+
+            notes = Notes.objects.filter(user=request.user, isTrash=True)
             serializer = NotesSerializer(notes, many=True)
             return Response({"success": True, 'message': 'isTrash retrieve successfully!', 'Data': serializer.data,
                              'status': 201}, status=201)
@@ -212,11 +221,10 @@ class NotesCollaboratorAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, note_id):
+    def post(self, request):
         try:
+            note_id = request.data.get('note_id')
             note = Notes.objects.get(pk=note_id)
-            # user_id = request.data.get('user_id')
-            # user = CustomUser.objects.get(pk=user_id)
 
             collaborator_data = request.data.get('collaborator')
             if collaborator_data is not None:
@@ -225,25 +233,30 @@ class NotesCollaboratorAPIView(APIView):
                 return Response({'message': 'Collaborator data is missing.'}, status=400)
 
             note.collaborator.add(collaborator)
-            # note.collaborator.add(user)
-            return Response({'message': f'Added collaborator with id {collaborator.id} to note with id {note_id}'},
+
+            return Response({'message': f'Added collaborator with id {collaborator} to note with id {note_id}'},
                             status=200)
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
-    def delete(self, request, note_id, user_id):
+    def delete(self, request):
         try:
+            note_id = request.data.get('note_id')
             note = Notes.objects.get(pk=note_id)
-            user = CustomUser.objects.get(pk=user_id)
-            if user in note.collaborator.all():
-                note.collaborator.remove(user)
+            collaborator_data = request.data.get('collaborator')
+            if collaborator_data is None:
+                return Response({'message': 'Collaborator data is missing.'}, status=400)
+
+            collaborator = get_collaborator(self, collaborator_data)
+            if collaborator in note.collaborator.all():
+                note.collaborator.remove(collaborator)
                 return Response(
-                    {'message': f'Successfully removed collaborator with id {user_id} from note with id {note_id}'},
+                    {'message':f'Successfully removed collaborator with {collaborator} from note with id {note_id}'},
                     status=200)
             else:
                 return Response(
-                    {'message': f'Collaborator with id {user_id} is not associated with note with id {note_id}'},
+                    {'message': f'Collaborator with id {collaborator} is not associated with note with id {note_id}'},
                     status=400)
         except Exception as e:
             logger.exception(e)

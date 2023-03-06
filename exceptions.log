@@ -2118,3 +2118,36 @@ Traceback (most recent call last):
   File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\query.py", line 650, in get
     raise self.model.DoesNotExist(
 Notes.models.Notes.DoesNotExist: Notes matching query does not exist.
+03/07/2023 01:14:36 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 156, in put
+    notes = Notes.objects.get(id=note_id, user=request.user)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\query.py", line 650, in get
+    raise self.model.DoesNotExist(
+Notes.models.Notes.DoesNotExist: Notes matching query does not exist.
+03/07/2023 01:14:36 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 156, in put
+    notes = Notes.objects.get(id=note_id, user=request.user)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\query.py", line 650, in get
+    raise self.model.DoesNotExist(
+Notes.models.Notes.DoesNotExist: Notes matching query does not exist.
+03/07/2023 01:14:36 AM : logging_confiq.logger : 
+Traceback (most recent call last):
+  File "C:\Users\RJ EMPIRE\Desktop\Django\FundooNotes\Notes\views.py", line 156, in put
+    notes = Notes.objects.get(id=note_id, user=request.user)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RJ EMPIRE\Desktop\env\env03\Lib\site-packages\django\db\models\query.py", line 650, in get
+    raise self.model.DoesNotExist(
+Notes.models.Notes.DoesNotExist: Notes matching query does not exist.

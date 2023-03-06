@@ -189,18 +189,14 @@ class TrashNotesAPIView(APIView):
     def put(self, request, note_id):
         try:
             notes = Notes.objects.get(id=note_id, user=request.user)
-            if notes:
-                if notes.isTrash == False:
-                    notes.isTrash = True
-                else:
-                    notes.isTrash = False
-                    return Response({'success': False, 'message': 'Notes isTrash unsuccessful!'}, status=200)
+            if request.method == 'PUT' and notes.isTrash:
+                notes.isTrash = False
                 notes.save()
-                return Response({'success': True, 'message': 'Notes isTrash successful!'}, status=200)
-            else:
-                return Response({"success": False, 'message': 'Note does not exist or does not belong to user!'},
-                                status=400)
-
+                return Response({'success': True, 'message': 'Note un-trashed successfully!'}, status=200)
+            elif notes.isTrash == False:
+                notes.isTrash = True
+                notes.save()
+                return Response({'success': True, 'message': 'Note trashed successfully!'}, status=200)
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)

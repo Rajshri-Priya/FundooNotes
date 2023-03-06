@@ -9,7 +9,6 @@ from Notes.models import Notes, Labels
 from Notes.redis_utils import RedisCrud
 from Notes.serializers import NotesSerializer, LabelsSerializer
 from logging_confiq.logger import get_logger
-from user_auth.models import CustomUser
 from Notes.serializers import get_collaborator
 
 # logger config
@@ -50,7 +49,8 @@ class NotesAPIView(APIView):
                     status=200)
 
             # notes = Notes.objects.filter(user=request.user)
-            notes = Notes.objects.filter(Q(user__id=request.user.id) | Q(collaborator__id=request.user.id)).distinct()
+            notes = Notes.objects.filter(Q(user__id=request.user.id) | Q(collaborator__id=request.user.id),
+                                         isArchive=False, isTrash=False).distinct()
             serializer = NotesSerializer(notes, many=True)
             return Response(
                 {"success": True, "message": "Note Retrieved Successfully", "data": serializer.data, "status": 200},
@@ -81,7 +81,7 @@ class NotesAPIView(APIView):
     # @swagger_auto_schema(request_body=NotesSerializer, operation_summary='DELETE Add Notes')
     def delete(self, request, note_id):
         try:
-            notes = Notes.objects.get(id=note_id)
+            notes = Notes.objects.get(id=note_id, user=request.user)
             notes.delete()
 
             RedisCrud().delete_note_in_redis(note_id, request.user)
@@ -103,7 +103,7 @@ class LabelsAPIView(APIView):
             serializer = LabelsSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save(user=request.user)
-            #serializer.save()
+            # serializer.save()
             return Response({"success": True, "message": "Label Added Successfully", "data": serializer.data,
                              "status": 201}, status=201)
         except Exception as e:
@@ -153,18 +153,15 @@ class ArchiveNoteList(APIView):
     @swagger_auto_schema(request_body=NotesSerializer, operation_summary='PUT Add Archive')
     def put(self, request, note_id):
         try:
-            notes = Notes.objects.get(id=note_id, user=request.user).first()
-            if notes:
-                if notes.isArchive == False:
-                    notes.isArchive = True
-                else:
-                    notes.isArchive = False
-                    return Response({"success": False, 'message': 'isArchived updated not successfully!'}, status=200)
+            notes = Notes.objects.get(id=note_id, user=request.user)
+            if request.method == 'PUT' and notes.isArchive:
+                notes.isArchive = False
                 notes.save()
-                return Response({"success": True, 'message': 'isArchived updated successfully!'}, status=200)
-            else:
-                return Response({"success": False, 'message': 'Note does not exist or does not belong to user!'},
-                                status=400)
+                return Response({'success': True, 'message': 'Note un-Archived successfully!'}, status=200)
+            elif notes.isArchive == False:
+                notes.isArchive = True
+                notes.save()
+                return Response({'success': True, 'message': 'Note Archived successfully!'}, status=200)
         except Exception as e:
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
@@ -203,7 +200,6 @@ class TrashNotesAPIView(APIView):
 
     def get(self, request):
         try:
-
             notes = Notes.objects.filter(user=request.user, isTrash=True)
             serializer = NotesSerializer(notes, many=True)
             return Response({"success": True, 'message': 'isTrash retrieve successfully!', 'Data': serializer.data,
@@ -214,9 +210,11 @@ class TrashNotesAPIView(APIView):
 
 
 class NotesCollaboratorAPIView(APIView):
+    serializer_class = NotesSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='Add Collaborator')
     def post(self, request):
         try:
             note_id = request.data.get('note_id')
@@ -236,6 +234,7 @@ class NotesCollaboratorAPIView(APIView):
             logger.exception(e)
             return Response({"success": False, "message": str(e), "status": 400}, status=400)
 
+    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='Delete Collaborator')
     def delete(self, request):
         try:
             note_id = request.data.get('note_id')
@@ -248,7 +247,7 @@ class NotesCollaboratorAPIView(APIView):
             if collaborator in note.collaborator.all():
                 note.collaborator.remove(collaborator)
                 return Response(
-                    {'message':f'Successfully removed collaborator with {collaborator} from note with id {note_id}'},
+                    {'message': f'Successfully removed collaborator with {collaborator} from note with id {note_id}'},
                     status=200)
             else:
                 return Response(

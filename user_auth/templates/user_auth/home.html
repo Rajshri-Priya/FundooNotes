@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% load static %}
+{% include 'user_auth/base.html' %}
+<!--{% csrf_token %}-->
+<html>
+<head>
+	<title>Fundoo Notes</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!--	<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<style>
+		.left-column {
+			background-color: #f8f9fa;
+			height: 100%;
+			position: fixed;
+			left: 0;
+			width: 200px;
+			padding-top: 25px;
+		}
+
+		.left-column .nav-link {
+			color: #000;
+			font-size:20px;
+		}
+
+		.left-column .nav-link:hover {
+			color: #007bff;
+		}
+
+		.main-content {
+			margin: 200px;
+			text-align:center
+		}
+		h3{
+            font-size: 2.8rem;
+            color: #1d2124;
+            margin-bottom: 1rem;
+		}
+		p{
+		      font-size: 20px;
+		}
+
+	</style>
+</head>
+<body>
+<div class="left-column">
+	<ul class="nav flex-column">
+		<li class="nav-item">
+			<a class="nav-link" href="#">Notes</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Reminder</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Edit Labels</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Archive</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Trash</a>
+		</li>
+	</ul>
+</div>
+
+<div class="main-content">
+<div class="container-fluid mt-4">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Welcome to Fundoo Notes</h3>
+			<p>Start creating notes to keep track of your tasks, reminders and ideas.</p>
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</html>

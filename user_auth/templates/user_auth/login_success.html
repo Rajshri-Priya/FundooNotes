@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+  <head>
+    <title>Login Successful</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    <div class="container">
+
+      <h1>Login Successful</h1>
+      <p style="font-size: 1.5rem; color: black;">{{ user }} have successfully logged in. Welcome back!</p>
+
+      <script>
+      setTimeout(function(){
+        window.location.href = "{% url 'home' %}";
+      }, 5000); // 3 seconds
+      </script>
+    </div>
+
+  </body>
+</html>

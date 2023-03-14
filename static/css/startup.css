@@ -1,0 +1,14 @@
+.container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 70vh;
+		}
+
+h1 {
+        font-size: 3.4rem;
+        color: #cf8311;
+        margin-bottom: 1rem;
+    }
+

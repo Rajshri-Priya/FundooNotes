@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+  <head>
+    <title>Login Successful</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    <div class="container">
+
+      <h1>Login Successful</h1>
+      <p>You successfully logged out. Come back soon!</p>
+
+      <script>
+      setTimeout(function(){
+        window.location.href = "{% url 'login_render' %}";
+      }, 1500); // 3 seconds
+      </script>
+    </div>
+
+  </body>
+</html>

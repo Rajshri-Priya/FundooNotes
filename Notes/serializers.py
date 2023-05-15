@@ -1,6 +1,4 @@
 from rest_framework import serializers
-from rest_framework.response import Response
-
 from Notes.models import Notes, Labels
 from user_auth.models import CustomUser
 from logging_confiq.logger import get_logger
@@ -20,10 +18,10 @@ def get_collaborator(self, collaborator_data):
                 return CustomUser.objects.filter(
                     username=collaborator_data).first()  # Retrieve user with given username
         else:  # If collaborator_data is not an integer or a string, return None
-            return None
+            raise serializers.ValidationError("Invalid collaborator data.")
     except Exception as e:
         logger.exception(e)
-        return Response({"success": False, "message": str(e), "status": 400})
+        raise serializers.ValidationError(str(e))
 
 
 class LabelsSerializer(serializers.ModelSerializer):
@@ -68,4 +66,3 @@ class NotesSerializer(serializers.ModelSerializer):
         label = Labels.objects.create(name=label_name, user=validated_data.get("user"))
         notes.label.add(label)
         return notes
-# isinstance,jinjatemplate,monothelic,

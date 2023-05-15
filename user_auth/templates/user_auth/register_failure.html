@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+<head>
+  <title>Registration Failure</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h1>User Registration Failed!!!</h1>
+    <p>{{ message }}</p>
+    <a href="{% url 'register_render' %}" class="btn btn-primary btn-block">Back to Registration Form</a>
+    <script>
+          function redirect() {
+              window.location.href = "{% url 'register_render' %}";
+          }
+          setTimeout(redirect, 3000);
+    </script>
+  </div>
+</body>
+</html>
+
+
+

@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<title>Fundoo Notes</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!--	<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+		.nav-item{
+		    font-size: 22px;
+		}
+		.navbar-light .navbar-brand {
+		    font-size: 30px;
+		    font-weight: bold;
+            color: rgb(221 9 195 / 88%)
+         }
+        .navbar-light .navbar-brand:hover {
+          color: rgb(221 9 195 / 88%);
+         }
+</style>
+
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="{% url 'home' %}">
+    <img src="{% static 'notes_images/rsp.png' %}" alt="Fundoo Notes" height="50">
+    Fundoo Notes
+  </a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <form class="form-inline">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Menu
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="#">Notes</a>
+          <a class="dropdown-item" href="#">Reminder</a>
+          <a class="dropdown-item" href="#">Edit Labels</a>
+          <a class="dropdown-item" href="#">Archive</a>
+          <a class="dropdown-item" href="#">Trash</a>
+        </div>
+      </li>
+      <!-- If user is authenticated, show a welcome message and a logout link -->
+        {% if user.is_authenticated  %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+
+        <!-- If user is not authenticated, show buttons to login and register -->
+        {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login_render' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'register_render' %}">Register</a>
+              </li>
+        {% endif %}
+    </ul>
+  </div>
+</nav>
+
+</body>
+</html>
+
+
+
+
+
+

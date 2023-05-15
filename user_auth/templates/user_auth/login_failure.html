@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Failure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Login Failed</h1>
+        <p>Invalid username or password. Please try again.</p>
+        <a href="{% url 'login_render' %}" class="btn btn-primary btn-block">login</a>
+
+        <script>
+        setTimeout(function(){
+          window.location.href = "{% url 'login_render' %}";
+        }, 2000); // 3 seconds
+        </script>
+    <div class="container">
+</body>
+</html>

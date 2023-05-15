@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+<head>
+	<title>Fundoo Note</title>
+	<link rel="stylesheet" href="{% static 'css/startup.css' %}">
+
+</head>
+<body>
+  <div class="container">
+	  <img src="{% static 'notes_images/rsp.png' %}" alt="Fundoo Notes" height="90">
+	<img src="{% static 'notes_images/fundoo.png' %}" alt="Fundoo Notes" height="80">
+	<h1>Welcome to Fundoo Note</h1>
+  </div>
+<script>
+		function redirect() {
+			window.location.href = "{% url 'login_render' %}";
+		}
+		setTimeout(redirect, 5000);
+	</script>
+</body>
+</html>
+
+
+
